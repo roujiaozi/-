@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.entity.Course">
+  <insert id="courseAdd" parameterType="com.ssm.entity.Course">
+      insert into course values (#{cid},#{cname},#{tid},#{credit},#{shape},#{remain});
+  </insert>
+    <select id="FindAllNum"  resultType="java.lang.Integer">
+    select count(*) from course
+    </select>
+    <delete id="courseDelete" parameterType="String">
+        delete from course where  cid=#{cid}
+    </delete>
+    <update id="courseUpdate" parameterType="com.ssm.entity.Course">
+        update course set  cid=#{cid}, cname=#{cname},tid=#{tid},credit=#{credit}, shape=#{shape},remain=#{remain}
+        where cid=#{cid}
+    </update>
+    <select id="FindAllCourse" resultType="com.ssm.entity.Course">
+        select * from course
+    </select>
+    <select id="FindAllTidCourse" parameterType="String" resultType="com.ssm.entity.Course">
+        select * from course where tid=#{tid}
+    </select>
+    <select id="FindAllCourse1" parameterType="java.util.Map" resultType="com.ssm.entity.Course">
+        select * from course  where 1=1
+        and  cname like concat('%',#{cname},'%') and shape =#{type}  limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllCourse2" parameterType="java.util.Map" resultType="com.ssm.entity.Course">
+        select * from course  where 1=1
+        and   shape =#{type}  limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllCourse3" parameterType="java.util.Map" resultType="com.ssm.entity.Course">
+        select * from course  where 1=1
+        and  cname like concat('%',#{cname},'%')   limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllCourse4" parameterType="java.util.Map" resultType="com.ssm.entity.Course">
+        select * from course  where 1=1  limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllCourse5" parameterType="java.util.Map" resultType="com.ssm.entity.Course">
+        select * from course  where 1=1 and tid=#{tid}
+        and  cname like concat('%',#{cname},'%') and shape =#{type}
+    </select>
+    <select id="FindAllCourse6" parameterType="java.util.Map" resultType="com.ssm.entity.Course">
+        select * from course  where 1=1 and tid=#{tid}
+        and   shape =#{type}
+    </select>
+    <select id="FindAllCourse7" parameterType="java.util.Map" resultType="com.ssm.entity.Course">
+        select * from course  where 1=1 and tid=#{tid}
+        and  cname like concat('%',#{cname},'%')
+    </select>
+    <select id="FindAllCourse8" parameterType="java.util.Map" resultType="com.ssm.entity.Course">
+        select * from course  where 1=1  and tid=#{tid}
+    </select>
+
+    <select id="FindAllCourseNum1" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from course  where 1=1
+        and  cname like concat('%',#{cname},'%') and shape =#{type}
+    </select>
+    <select id="FindAllCourseNum2" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from course  where 1=1
+        and   shape =#{type}
+    </select>
+    <select id="FindAllCourseNum3" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from course  where 1=1
+        and  cname like concat('%',#{cname},'%')
+    </select>
+    <select id="FindAllCourseNum4" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from course  where 1=1
+    </select>
+    <select id="FindAllCourseNum5" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from course  where 1=1 and tid=#{tid}
+        and  cname like concat('%',#{cname},'%') and shape =#{type}  limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllCourseNum6" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from course  where 1=1 and tid=#{tid}
+        and   shape =#{type}  limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllCourseNum7" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from course  where 1=1 and tid=#{tid}
+        and  cname like concat('%',#{cname},'%')
+    </select>
+    <select id="FindAllCourseNum8" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from course  where 1=1  and tid=#{tid}
+    </select>
+    <select id="ExistCourse" parameterType="java.lang.String" resultType="com.ssm.entity.Course">
+        select * from course  where tid=#{tid}
+    </select>
+    <select id="FindOneCourse" parameterType="String" resultType="com.ssm.entity.Course">
+        select * from course where cid=#{cid}
+    </select>
+    <select id="getCourseId" resultType="String">
+        select CONCAT('kecheng',YEAR(CURDATE()),lpad(max(right(cid,8))+1, 8, 0)) as cid from course
+    </select>
+</mapper>

@@ -1,0 +1,21 @@
+﻿[
+	{ id: "user", text: "学生信息管理", iconCls: "icon-add"},
+	{ id: "addUser", pid: "user", text: "学生信息展示", iconCls: "icon-add", url: "../../pages/studentinfo/studentinfolist.html" },
+
+
+	{ id: "right", text: "教师信息管理", iconCls: "icon-add"},
+	{ id: "addRight", pid: "right", text: "教师信息管理",iconCls: "icon-add",  url: "../../pages/teacherinfo/teacherinfoList.html"},
+
+	{ id: "teacher", text: "课程管理", iconCls: "icon-add"},
+	{ id: "addTeacher", pid: "teacher", text: "课程信息管理", iconCls: "icon-add",  url: "../../pages/courseinfo/courseinfolist.html"},
+    { id: "addCourse", pid: "teacher", text: "选课信息管理", iconCls: "icon-add",  url: "../../pages/chooseinfo/chooseinfolist.html"},
+
+    { id: "sassess", text: "测评管理", iconCls: "icon-add"},
+    { id: "addSassess", pid: "sassess", text: "学生对教师的测评信息", iconCls: "icon-add",  url: "../../pages/assess/sassess.html"},
+    { id: "addTassess", pid: "sassess", text: "老师对老师的测评信息", iconCls: "icon-add",  url: "../../pages/assess/tassess.html"},
+    { id: "addTassess", pid: "sassess", text: "测评结果", iconCls: "icon-add",  url: "../../pages/assess/result.html"},
+
+
+
+
+]

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.entity.Sassess">
+    <insert id="SassessAdd" parameterType="com.ssm.entity.Sassess" >
+        insert into sassess values (#{sid},#{cid},#{cname},#{tid},#{tname},#{question1},#{question2},#{question3},#{question4},#{question5});
+    </insert>
+    <delete id="SassessDelete" parameterType="java.util.Map" >
+        delete from sassess where  tid=#{tid} and cid=#{cid} and sid=#{sid};
+    </delete>
+    <select id="FindAllSassess1" parameterType="java.util.Map" resultType="com.ssm.entity.Sassess">
+        select * from sassess  where 1=1
+        and  cname like concat('%',#{cname},'%') and tname like concat('%',#{tname},'%')  limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllSassess2" parameterType="java.util.Map" resultType="com.ssm.entity.Sassess">
+        select * from sassess  where 1=1
+        and   tname like concat('%',#{tname},'%')  limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllSassess3" parameterType="java.util.Map" resultType="com.ssm.entity.Sassess">
+        select * from sassess  where 1=1
+        and  cname like concat('%',#{cname},'%')   limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllSassess4" parameterType="java.util.Map" resultType="com.ssm.entity.Sassess">
+        select * from sassess  where 1=1  limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllSassess5" parameterType="java.util.Map" resultType="com.ssm.entity.Sassess">
+        select * from sassess  where 1=1
+      and sid=#{sid} and  cname like concat('%',#{cname},'%') and tname like concat('%',#{tname},'%')  limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllSassess6" parameterType="java.util.Map" resultType="com.ssm.entity.Sassess">
+        select * from sassess  where 1=1
+     and sid=#{sid}   and   tname like concat('%',#{tname},'%')  limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllSassess7" parameterType="java.util.Map" resultType="com.ssm.entity.Sassess">
+        select * from sassess  where 1=1
+      and sid=#{sid}  and  cname like concat('%',#{cname},'%')   limit #{zongshu},#{pageSize}
+    </select>
+    <select id="FindAllSassess8" parameterType="java.util.Map" resultType="com.ssm.entity.Sassess">
+       select * from sassess  where 1=1   and sid=#{sid} limit #{zongshu},#{pageSize}
+    </select>
+
+    <select id="FindAllSassessNum1" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from sassess  where 1=1
+        and  cname like concat('%',#{cname},'%') and tname like concat('%',#{tname},'%')
+    </select>
+    <select id="FindAllSassessNum2" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from sassess  where 1=1
+        and   tname like concat('%',#{tname},'%')
+    </select>
+    <select id="FindAllSassessNum3" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from sassess  where 1=1
+        and  cname like concat('%',#{cname},'%')
+    </select>
+    <select id="FindAllSassessNum4" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from sassess  where 1=1
+    </select>
+    <select id="FindAllSassessNum5" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from sassess  where 1=1
+      and sid=#{sid} and  cname like concat('%',#{cname},'%') and tname like concat('%',#{tname},'%')
+    </select>
+    <select id="FindAllSassessNum6" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from sassess  where 1=1
+     and sid=#{sid}   and   tname like concat('%',#{tname},'%')
+    </select>
+    <select id="FindAllSassessNum7" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from sassess  where 1=1
+      and sid=#{sid}  and  cname like concat('%',#{cname},'%')
+    </select>
+    <select id="FindAllSassessNum8" parameterType="java.util.Map" resultType="java.lang.Integer">
+       select count(*) from sassess  where 1=1   and sid=#{sid}
+    </select>
+    <select id="FindAllSassess" parameterType="java.util.Map" resultType="com.ssm.entity.Sassess">
+       select * from sassess  where  tid=#{tid} and cid=#{cid}
+    </select>
+    <select id="FindAllSassessNum"  resultType="java.lang.Integer">
+    select count(*) from sassess
+    </select>
+
+    <select id="FindOneSassess" parameterType="java.util.Map" resultType="com.ssm.entity.Sassess">
+        select * from sassess where tid=#{tid} and cid=#{cid} and sid=#{sid}
+    </select>
+</mapper>

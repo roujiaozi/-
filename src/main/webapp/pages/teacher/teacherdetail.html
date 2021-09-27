@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>员工面板</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <script src="../../scripts/boot.js" type="text/javascript"></script>
+
+
+    <style type="text/css">
+        html, body {
+            padding: 0;
+            margin: 0;
+            border: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .asLabel .mini-textbox-border, .asLabel .mini-textbox-input, .asLabel .mini-buttonedit-border,
+        .asLabel .mini-buttonedit-input, .asLabel .mini-textboxlist-border {
+            border: 0;
+            background: none;
+            cursor: default;
+        }
+
+        .asLabel .mini-buttonedit-button, .asLabel .mini-textboxlist-close {
+            display: none;
+        }
+
+        .asLabel .mini-textboxlist-item {
+            padding-right: 8px;
+        }
+    </style>
+
+</head>
+<body>
+
+<form id="form1" method="post">
+
+    <div style="padding-left: 11px; padding-bottom: 5px;">
+        <table style="table-layout: fixed;">
+            <tr>
+                <td style="width: 80px;">老师编号：</td>
+                <td style="width: 150px;">
+                    <input name="tid" allowInput="false" class="mini-textbox " required="true" />
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 80px;">老师姓名：</td>
+                <td style="width: 150px;">
+                    <input name="tname" allowInput="false" class="mini-textbox " required="true" />
+                </td>
+
+            </tr>
+            <tr>
+                <td>性别：</td>
+                <td>
+                    <input name="tsex" allowInput="false" class="mini-textbox " required="true" />
+                </td>
+             </tr>
+            <tr>
+                <td>年龄：</td>
+                <td>
+                    <input name="tage" allowInput="false" class="mini-textbox " required="true" />
+                </td>
+             </tr>
+            <tr>
+                <td>密码：</td>
+                <td>
+                    <input name="password" allowInput="false" class="mini-textbox " required="true" />
+                </td>
+            </tr>
+
+
+        </table>
+    </div>
+    <!--
+    <div style="text-align:center;padding:10px;">
+        <a class="mini-button" onclick="onOk" style="width:60px;margin-right:20px;">确定</a>
+        <a class="mini-button" onclick="onCancel" style="width:60px;">取消</a>
+    </div>        -->
+</form>
+<script type="text/javascript">
+    mini.parse();
+
+    var form = new mini.Form("form1");
+
+    var thisURL = document.URL;
+    var getval =thisURL.split('?')[1];
+    var showval= getval.split("=")[1];
+    console.log("showval"+showval);
+
+    function SaveData() {
+        var o = form.getData();
+
+        form.validate();
+        if (form.isValid() == false) return;
+        var json = mini.encode(o);
+        console.log(json);
+        $.ajax({
+            url: "../bookinfoedit",
+            type: 'post',
+            data: { data: json },
+            success: function (text) {
+                CloseWindow("save");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                mini.alert(jqXHR.responseText);
+                CloseWindow();
+            }
+        });
+    }
+
+    ////////////////////
+    //标准方法接口定义
+    window.onload=function SetData(){
+            $.ajax({
+                url: "../../teacherUser/teacherUserDetail.do?tid="+ this.showval,
+                cache: false,
+                success: function (text) {
+                    console.log(text);
+                    var o = mini.decode(text);
+                    form.setData(o);
+                    form.setChanged(false);
+                    //   onDeptChanged();
+                    // mini.getbyName("position").setValue(o.position);
+                }
+            });
+    }
+
+    function GetData() {
+        var o = form.getData();
+        return o;
+    }
+    function CloseWindow(action) {
+        if (action == "close" && form.isChanged()) {
+            if (confirm("数据被修改了，是否先保存？")) {
+                return false;
+            }
+        }
+        if (window.CloseOwnerWindow) return window.CloseOwnerWindow(action);
+        else window.close();
+    }
+    function onOk(e) {
+        SaveData();
+    }
+    function onCancel(e) {
+        CloseWindow("cancel");
+    }
+    //////////////////////////////////
+    /*   function onDeptChanged(e) {
+           var deptCombo = mini.getbyName("dept_id");
+           var positionCombo = mini.getbyName("position");
+           var dept_id = deptCombo.getValue();
+
+           positionCombo.load("../data/AjaxService.jsp?method=GetPositionsByDepartmenId&id=" + dept_id);
+           positionCombo.setValue("");
+       }*/
+    var Genders = [ {
+        id : 1,
+        text : '艺术类'
+    }, {
+        id : 2,
+        text : '文学类'
+    },
+        {
+            id : 3,
+            text : '其他'
+        }];
+    function onGenderRenderer(e) {
+        for (var i = 0, l = Genders.length; i < l; i++) {
+            var g = Genders[i];
+            if (g.id == e.value)
+                return g.text;
+        }
+        return "";
+    }
+
+
+
+</script>
+</body>
+</html>

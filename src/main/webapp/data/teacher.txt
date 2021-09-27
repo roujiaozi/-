@@ -1,0 +1,13 @@
+[
+	{ id: "user", text: "个人信息管理", iconCls: "icon-add"},
+	{ id: "addUser", pid: "user", text: "个人信息详情", iconCls: "icon-add", url: "../../pages/teacher/teacherdetail.html" },
+	{ id: "updateUser", pid: "user", text: "密码修改", iconCls: "icon-add", url: "../../pages/teacher/teacheredit.html" },
+
+	{ id: "right", text: "课程管理"},
+	{ id: "addRight", pid: "right", text: "课程信信息",iconCls: "icon-add", url: "../../pages/teacher/courseinfolist.html"},
+
+	{ id: "teacher", text: "测评信息管理"},
+	{ id: "assessList", pid: "teacher", text: "测评记录", iconCls: "icon-add", url: "../../pages/teacher/Teacherassess.html"},
+	{ id: "assessList", pid: "teacher", text: "课程反馈", iconCls: "icon-add", url: "../../pages/teacher/teacherresult.html"},
+
+]

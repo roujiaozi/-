@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DataGrid 数据表格</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link href="../../res/css/demo.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../scripts/boot.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div style="width: 100%;">
+    <div class="mini-toolbar" style="border-bottom: 0; padding: 0px;">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100%;">
+<!--                    <a class="mini-button" iconCls="icon-add" onclick="add()">增加</a>-->
+<!--                    <a class="mini-button" iconCls="icon-add" onclick="remove()">删除</a>-->
+
+                <td style="white-space: nowrap;">
+                    <input id="chaxunbookname" class="mini-textbox" emptyText="教师姓名" style="width: 150px;" onenter="onKeyEnter" />
+                    <input id="chaxunbooktype" class="mini-textbox" emptyText="课程名" style="width: 150px;" onenter="onKeyEnter" />
+                    <a class="mini-button" onclick="search()">查询</a>
+                    <a class="mini-button" onclick="qingkong()">清空</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div id="datagrid1" class="mini-datagrid" style="width: 100%; height: 400px;" allowResize="true"
+      idField="id" multiSelect="true" align="center">
+    <div property="columns" align>
+        <div type="checkcolumn"></div>
+        <div type="indexcolumn">序</div>
+        <div field="tid" width="120" headerAlign="center" allowSort="true" align="center">教师编号</div>
+        <div field="tname" align="center" name="bookname" width="120" headerAlign="center" allowSort="true">教师姓名</div>
+        <div field="cid" headerAlign="center" align="center" width="120">课程编号</div>
+        <div field="cname" align="center" width="100" headerAlign="center"allowSort="true">课程名</div>
+        <div field="sid" width="120" align="center" headerAlign="center" allowSort="true" >学生编号</div>
+        <div field="" width="120" align="center" headerAlign="center" allowSort="true" renderer="onActionRenderer">操作按钮</div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    mini.parse();
+    var thisURL = document.URL;
+    var getval =thisURL.split('?')[1];
+    var showval= getval.split("=")[1];
+    var grid = mini.get("datagrid1");
+    grid.setUrl("/ssm02/studentUser/studentchooselist.do?method=list"+"&sid="+this.showval);
+    console.log(this.showval);
+    grid.load();
+    grid.sortBy("createtime", "desc");
+
+
+    function booknum(e){
+        var remain = e.row.remain;
+        if (10 >= remain) {
+            e.cellStyle = 'font-weight:bold;color:red;';
+        }
+        return remain;
+    }
+
+    function onActionRenderer(e) {
+        var grid = e.sender;
+        var record = e.record;
+        var uid = record._uid;
+        var rowIndex = e.rowIndex;
+
+
+        var s ='<a class="mini-button"  onclick="edit()">测评</a> &nbsp';
+        return s;
+    }
+
+    function add() {
+
+        mini.open({
+            url : "../../pages/chooseinfo/chooseinfoadd.html",
+            title : "新增员工",
+            width : 600,
+            height : 250,
+            onload : function() {
+                var iframe = this.getIFrameEl();
+                var data = {
+                    action : "addStudent"
+                };
+                iframe.contentWindow.SetData(data);
+            },
+            ondestroy : function(action) {
+
+                grid.reload();
+            }
+        });
+    }
+    function borrow() {
+        var row = grid.getSelected();
+        var bookname = row.bookname;
+        mini.open({
+            url : "../../pages/borrowinfo/borrowinfoadd.html",
+            title : "借阅",
+            width : 600,
+            height : 250,
+            onload : function() {
+
+                var iframe = this.getIFrameEl();
+                var data = {
+                    action : "borrowgetid",
+                    bookname : row.bookname
+
+                };
+                iframe.contentWindow.SetData(data);
+            },
+            ondestroy : function(action) {
+
+                grid.reload();
+            }
+        });
+    }
+    function Detail() {
+        var row = grid.getSelected();
+        if (row) {
+            mini.open({
+                url : "../../pages/bookinfo/bookinfodetail.html?data.id="+row.bookid,
+                title : "编辑员工",
+                width : 600,
+                height : 200,
+                onload : function() {
+                    var iframe = this.getIFrameEl();
+                    var data = {
+                        action : "edit",
+                        id : row.bookid
+                    };
+                    iframe.contentWindow.SetData(data);
+
+                },
+                ondestroy : function(action) {
+                    grid.reload();
+
+                }
+            });
+
+        } else {
+
+        }
+
+    }
+
+    function edit() {
+        var row = grid.getSelected();
+        console.log(row.sid);
+        if (row) {
+            mini.open({
+                url :"../../pages/student/sassess.html",
+                title : "测评(满分10分)",
+                width : 600,
+                height : 350,
+                onload : function() {
+                    var iframe = this.getIFrameEl();
+                    var data = {
+                        action : "edit",
+                        sid : row.sid,
+                        tid : row.tid,
+                        tname : row.tname,
+                        cid : row.cid,
+                        cname : row.cname
+                    };
+                    iframe.contentWindow.SetData(data);
+
+                },
+                ondestroy : function(action) {
+                    grid.reload();
+
+                }
+            });
+
+        } else {
+            mini.alert("请选中一条记录");
+        }
+
+    }
+    function remove() {
+
+        var rows = grid.getSelecteds();
+
+        if (rows.length > 0) {
+            if (confirm("确定删除选中记录？")) {
+                var ids = [];
+                for (var i = 0, l = rows.length; l > i; i++) {
+                    var r = rows[i];
+                    ids.push(r.sid);
+
+                }
+
+                var id = ids.join(',');
+                grid.loading("操作中，请稍后......");
+                $.ajax({
+                    url :"/ssm02/student/deleteStudent.do?id="+id,
+                    success : function(text) {
+                        grid.reload();
+                        mini.alert(text);
+                    },
+                    error : function() {
+                    }
+                });
+            }
+        } else {
+            mini.alert("请选中一条记录");
+        }
+    }
+    function qingkong() {
+        //清空前设置值
+        mini.get("chaxunbookname").setValue("");
+        mini.get("chaxunbooktype").setValue("");
+        search();
+    }
+    function search() {
+        //传递模糊查询的值参数 req.get获得
+        var chaxunbookname = mini.get("chaxunbookname").getValue();
+        var chaxunbooktype = mini.get("chaxunbooktype").getValue();
+        grid.load({
+            chaxunbookname : chaxunbookname,
+            chaxunbooktype:chaxunbooktype,
+            sid:this.showval
+        });
+    }
+    function onKeyEnter(e) {
+        search();
+    }
+    /////////////////////////////////////////////////
+    function onMarriedRenderer(e) {
+        if (e.value == 1)
+            return "是";
+        else
+            return "否";
+    }
+    //定义一个全局变量bookType
+    var bookType;
+    //通过获取booktype.txt中的文本并且转换成对象
+    function getBookTypeObject() {
+        $.ajax({
+            url : "../../data/booktype.txt",
+            success : function(text) {
+                //console.log(text);
+                //将json文件文本转换成js对象
+                bookType = mini.decode(text);
+                console.log(bookType);
+            },
+            error : function(text) {
+            }
+        });
+    }
+    function onBookTypeRender(e) {
+        for (var i = 0; i < bookType.length; i++) {
+            if (bookType[i].id == e.value) {
+                return bookType[i].text;
+            }
+        }
+    }
+
+</script>
+
+<div class="description">
+    <h3>Description</h3>
+
+</div>
+</body>

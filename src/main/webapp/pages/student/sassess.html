@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>员工面板</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <script src="../../scripts/boot.js" type="text/javascript"></script>
+
+
+    <style type="text/css">
+        html, body {
+            padding: 0;
+            margin: 0;
+            border: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<form id="form1" method="post">
+    <input name="" class="mini-hidden" />
+    <div style="padding-left: 11px; padding-bottom: 5px;">
+        <table style="table-layout: fixed;">
+            <tr>
+                <td style="width: 80px;">教师编号：</td>
+                <td style="width: 150px;"><input name="tid" id="tid" enabled="false"
+                                                 class="mini-textbox" required="true" /></td>
+                <td style="width: 80px;">教师姓名：</td>
+                <td style="width: 150px;"><input name="tname" id="tname" enabled="false"
+                                                 class="mini-textbox" required="true" /></td>
+            </tr>
+            <tr>
+                <td style="width: 80px;">课程编号：</td>
+                <td style="width: 150px;"><input name="cid" id="cid" enabled="false"
+                                                 class="mini-textbox" required="true" /></td>
+                <td style="width: 80px;">课程姓名：</td>
+                <td style="width: 150px;"><input name="cname" id="cname" enabled="false"
+                                                 class="mini-textbox" required="true" /></td>
+            </tr>
+            <tr>
+                <td style="width: 80px;">学生编号：</td>
+                <td style="width: 150px;"><input name="sid" id="sid" enabled="false"
+                                                 class="mini-textbox" required="true" /></td>
+
+            </tr>
+            <tr>
+
+                <td style="width: 80px;">老师出勤：</td>
+                <td style="width: 150px;">
+                    <input id="question1" name="question1" class="mini-spinner"  minValue="0" maxValue="10" />
+                <td style="width: 80px;">上课纪律：</td>
+                <td style="width: 150px;">
+                    <input id="question2" name="question2" class="mini-spinner"  minValue="0" maxValue="10" />
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 80px;">上课氛围：</td>
+                <td style="width: 150px;">
+                    <input id="question3" name="question3" class="mini-spinner"  minValue="0" maxValue="10" />
+                <td style="width: 80px;">作业批改：</td>
+                <td style="width: 150px;">
+                    <input id="question4" name="question4" class="mini-spinner"  minValue="0" maxValue="10" />
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 80px;">一视同仁：</td>
+                <td style="width: 150px;">
+                    <input id="question5" name="question5" class="mini-spinner"  minValue="0" maxValue="10" />
+            </tr>
+
+
+
+        </table>
+    </div>
+    <div style="text-align: center; padding: 10px;">
+        <a class="mini-button" onclick="onOk"
+           style="width: 60px; margin-right: 20px;">确定</a> <a
+            class="mini-button" onclick="onCancel" style="width: 60px;">取消</a>
+    </div>
+</form>
+<script type="text/javascript">
+    mini.parse();
+
+    var form = new mini.Form("form1");
+    function onDrawDate(e) {
+        var date = e.date;
+        var d = new Date();
+
+        if (date.getTime() >d.getTime()) {
+            e.allowSelect = false;
+        }
+    }
+    function SaveData() {
+        var o = form.getData();
+        //表单验证
+        form.validate();
+        if (form.isValid() == false) {
+            return;
+        }
+        //json对象序列化成字符串
+        var json = mini.encode(o);
+        $.ajax({
+            url : "../../studentUser/sassess.do?method=borrowinfoadd",
+            type : 'get',
+            data : {
+                data : json
+            },
+            cache : false,
+            success : function(text) {
+                mini.alert(text);
+            },
+            error : function(jqXHR, textStatus, errorThrown) {
+                mini.alert(jqXHR.responseText);
+                CloseWindow();
+            }
+        });
+    }
+    ////////////////////
+    //标准方法接口定义
+    function SetData(data) {
+        if (data.action == "edit") {
+            //跨页面传递的数据对象，克隆后才可以安全使用
+            data = mini.clone(data);
+            console.log(data.sid);
+            mini.get("sid").setValue(data.sid);
+            mini.get("cid").setValue(data.cid);
+            mini.get("cname").setValue(data.cname);
+            mini.get("tid").setValue(data.tid);
+            mini.get("tname").setValue(data.tname);
+
+        }
+    }
+    function GetData() {
+        var o = form.getData();
+        return o;
+    }
+    function CloseWindow(action) {
+        if (action == "close" && form.isChanged()) {
+            if (confirm("数据被修改了，是否先保存？")) {
+                return false;
+            }
+        }
+        if (window.CloseOwnerWindow)
+            return window.CloseOwnerWindow(action);
+        else
+            window.close();
+    }
+    function onOk(e) {
+        SaveData();
+    }
+    function onCancel(e) {
+        CloseWindow("cancel");
+    }
+    //////////////////////////////////
+    function onDeptChanged(e) {
+        var positionCombo = mini.getbyName("position");
+        positionCombo.load("../data/booktype.txt?id=" + dept_id);
+        positionCombo.setValue("");
+    }
+</script>
+</body>
+</html>

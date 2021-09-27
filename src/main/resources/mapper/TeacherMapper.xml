@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Teacher">
+    <insert id="addTeacher" parameterType="com.ssm.entity.Teacher" >
+        insert  into teacher values (#{tid},#{tname},#{tsex},#{tage},#{password})
+    </insert>
+    <delete id="deleteTeacher" parameterType="String">
+        delete from teacher where  tid=#{tid}
+    </delete>
+    <update id="updateTeacher" parameterType="com.ssm.entity.Teacher">
+        update  teacher set  tid=#{tid},tname=#{tname},tsex=#{tsex},tage=#{tage},password=#{password}
+        where tid=#{tid}
+    </update>
+
+    <select id="loginTeacher" parameterType="java.util.Map" resultType="com.ssm.entity.Teacher">
+    select * from teacher where  tid=#{tid} and password =#{password}
+    </select>
+    <select id="getTid" resultType="String">
+        select CONCAT('teacher',YEAR(CURDATE()),lpad(max(right(tid,8))+1, 8, 0)) as tid from teacher
+    </select>
+    <select id="findAllFenYeTeacher1" parameterType="java.util.Map" resultType="com.ssm.entity.Teacher">
+        select * from teacher where  tname like concat('%',#{tname},'%')   limit #{zongshu},#{pageSize}
+    </select>
+    <select id="findAllFenYeTeacher2" parameterType="java.util.Map" resultType="com.ssm.entity.Teacher">
+        select * from  teacher where  1=1  limit #{zongshu},#{pageSize}
+    </select>
+    <select id="findAllFenYeTeacherNum1" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from teacher where  tname like concat('%',#{tname},'%')
+    </select>
+    <select id="findAllFenYeTeacherNum2" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from  teacher where  1=1
+    </select>
+    <select id="findOneTeacher" parameterType="String" resultType="com.ssm.entity.Teacher">
+        select * from teacher where tid=#{tid}
+    </select>
+    <select id="findTeacherAllNum" resultType="java.lang.Integer">
+        select count(*)  from teacher
+    </select>
+    <select id="findAllTeacher" resultType="com.ssm.entity.Teacher">
+        select  * from  teacher
+    </select>
+
+</mapper>
